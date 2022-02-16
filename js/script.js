@@ -22,17 +22,17 @@ const message = document.querySelector(".message");
 const playAgainButton = document.querySelector(".play-again");
 
 //Maintain an array of guessed letters
-const guesses = [];
+let guesses = [];
 
 //Counts the remaining guesses
 let numGuesses = 8;
 
 //Store the word for the game
-let word = "actually";
+let word = "";
 let playerWord = "";
 
 //Retrieve word list to select from txt word list on Skillcrush
-/*const getWords = async function () {
+const getWords = async function () {
     const data = await fetch("https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt");
     const words = await data.text();
     const wordArray = words.split("\n");
@@ -44,7 +44,6 @@ let playerWord = "";
 
 //Start the game!
 getWords();
-*/
 
 /***** MAIN JS SCRIPT *****/
 
@@ -98,12 +97,12 @@ const updateLetterDisplay = function() {
 }
 
 //Update the word in progress based on player guesses
-const wordInProgress = function(arr) {
+const wordInProgress = function() {
     let wordUpperArray = word.toUpperCase().split("");
     let matches = [];
 
     for (let letter of wordUpperArray) {
-        if (arr.includes(letter.toUpperCase())) {
+        if (guesses.includes(letter.toUpperCase())) {
             matches.push(letter);
         } else {
             matches.push("●");
@@ -131,6 +130,7 @@ const updateGuesses = function (guess) {
         message.innerText = `Be careful player. You only have one guess remaining. Don't screw up!`;
     } else if (numGuesses === 0) {
         message.innerText = `GAME OVER! You used all of your guesses. The word was ${word}.`;
+        startOver();
     }
 }
 
@@ -141,9 +141,9 @@ const playerWin = function() {
     if (playerWord === word) {
         message.classList.add("win");
         message.innerHTML = '<p class="highlight">You guessed correct the word! Congrats!</p>.';
+        startOver();
     }
 }
-
 
 //Create function to handle when the player clicks the Guess button
 guessButton.addEventListener("click", function(e) {
@@ -155,8 +155,30 @@ guessButton.addEventListener("click", function(e) {
     if (validInput !== undefined) {
         makeGuess(validInput);
     };
-    wordInProgress(guesses);
+    wordInProgress();
     playerWin();
 })
 
-//**NOTES: What do you do if the ltter has more than one copy of a letter? */
+//Show the start game over screen with a win or loss
+const startOver = function () {
+    guessButton.classList.add("hide");
+    remainingGuess.classList.add("hide");
+    guessedLetters.classList.add("hide");
+    playAgainButton.classList.remove("hide");
+}
+
+//Create function to handle when the player clicks the Play Again button
+playAgainButton.addEventListener("click", function(e) {
+    message.classList.remove("win");
+    message.innerText = "";
+    guessedLetters.innerText = "";
+    numGuesses = 8;
+    remainingSpan.innerText = `${numGuesses} guesses`;
+    guesses = [];
+    guessButton.classList.remove("hide");
+    remainingGuess.classList.remove("hide");
+    guessedLetters.classList.remove("hide");
+    playAgainButton.classList.add("hide");
+    getWords();
+    wordInProgress();
+})
