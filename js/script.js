@@ -55,14 +55,54 @@ const validateInput = function(input) {
     }
 }
 
-//
+//Stores player guesses in an array
 const makeGuess = function(letter) {
-    if (guesses.includes(letter.toUpperCase())) {
+    letter = letter.toUpperCase();
+
+    if (guesses.includes(letter)) {
         messages.innerText = "You have already guessed this letter. Please try another letter!";
     } else {
         guesses.push(letter);
+        updateLetterDisplay();
+        wordInProgress(guesses);
+    };
+}
+
+//Updates the letter display in the game to track guesses
+const updateLetterDisplay = function() {
+    guessedLetters.innerHTML = "";
+    for (let letter of guesses) {
+        let li = document.createElement("li");
+        li.innerText = letter;
+        guessedLetters.append(li);
     }
-    console.log(guesses);
+}
+
+//Update the word in progress based on player guesses
+const wordInProgress = function(arr) {
+    let wordUpperArray = word.toUpperCase().split("");
+    let matches = [];
+
+    for (let letter of wordUpperArray) {
+        if (arr.includes(letter.toUpperCase())) {
+            matches.push(letter);
+        } else {
+            matches.push("●");
+        }
+    };
+
+    wordProgress.innerText = matches.join("");
+}
+
+//Check if the player won
+const playerWin = function() {
+    let playerGuess = guesses.join("");
+    console.log(playerGuess, word);
+
+    if (playerGuess === word) {
+        message.classList.add("win");
+        message.innerHTML = '<p class="highlight">You guessed correct the word! Congrats!</p>.';
+    }
 }
 
 
@@ -77,4 +117,8 @@ guessButton.addEventListener("click", function(e) {
     if (validInput !== undefined) {
         makeGuess(validInput);
     };
+    wordInProgress(guesses);
+    playerWin();
 });
+
+//**NOTES: What do you do if the ltter has more than one copy of a letter? */
