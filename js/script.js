@@ -21,6 +21,9 @@ const message = document.querySelector(".message");
 //Play again button selector
 const playAgainButton = document.querySelector(".play-again");
 
+//Text one letter label text
+const label = document.querySelector(".label");
+
 //Maintain an array of guessed letters
 let guesses = [];
 
@@ -165,6 +168,8 @@ const startOver = function () {
     guessButton.classList.add("hide");
     remainingGuess.classList.add("hide");
     guessedLetters.classList.add("hide");
+    playerInput.classList.add('hide');
+    label.classList.add('hide');
     playAgainButton.classList.remove("hide");
 }
 
@@ -173,13 +178,16 @@ playAgainButton.addEventListener("click", function(e) {
     message.classList.remove("win");
     message.innerText = "";
     guessedLetters.innerText = "";
+    wordProgress.innerText = "";
     numGuesses = 8;
     remainingSpan.innerText = `${numGuesses} guesses`;
     guesses = [];
     guessButton.classList.remove("hide");
     remainingGuess.classList.remove("hide");
     guessedLetters.classList.remove("hide");
+    playerInput.classList.remove('hide');
+    label.classList.remove('hide');
     playAgainButton.classList.add("hide");
     getWords();
-    wordInProgress();
+    //wordInProgress();
 })
