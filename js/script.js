@@ -58,7 +58,7 @@ const updateWordInProgress = function (string) {
     };
     playerWord = arr.join("");
     console.log(playerWord);
-    guessedLetters.innerText = playerWord;
+    wordProgress.innerText = playerWord;
 }
 
 //Validate user input as a single letter
